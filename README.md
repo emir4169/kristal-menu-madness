@@ -9,4 +9,4 @@ Download the ZIP by navigating to `Code -> Download ZIP`, which should download 
 3. Credit authors' assets!
 4. No doxxing scripts or anything that can be harmful to the player or just anyone.
 5. Do not make the menu a hell. Make sure the menu is still usable.
-6. Don't remove stuff other people have made. You can edit what they've made, though.
+6. Don't completely remove stuff other people have made. You can edit what they've made, though.
