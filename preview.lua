@@ -169,7 +169,7 @@ end
 
 function preview:updatename()
 
-	local name = "Menu Madness Menu Madness "
+	local name = "Menu Madness Menu Madness " -- despite be commited by TFLTV this code was made by SadDiamondMan. they made the code, not me.
 	local name_length = #name
 	
 
