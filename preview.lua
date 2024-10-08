@@ -169,55 +169,24 @@ end
 
 function preview:updatename()
 
-   local name = "Menu Madness "
+	local name = "Menu Madness Menu Madness "
+	local name_length = #name
+	
 
-print("1")
+	if preview.version_timer >= 1 then
+		local x = string.sub(name, -preview.title_num + name_length/2, -preview.title_num + name_length)
 
- if preview.version_timer >= 1 then
-        preview.version_timer = 0
-    if preview.title_num == 1 then
-        preview.button.name = "Menu Madness "
-        preview.title_num = 2
-    elseif preview.title_num == 2 then
-        preview.button.name = " Menu Madness"
-        preview.title_num = 3
-    elseif preview.title_num == 3 then
-        preview.button.name = "s Menu Madnes"
-        preview.title_num = 4
-    elseif preview.title_num == 4 then
-        preview.button.name = "ss Menu Madne"
-        preview.title_num = 5
-    elseif preview.title_num == 5 then
-        preview.button.name = "ess Menu Madn"
-        preview.title_num = 6
-    elseif preview.title_num == 6 then
-        preview.button.name = "ness Menu Mad"
-        preview.title_num = 7
-    elseif preview.title_num == 7 then
-        preview.button.name = "dness Menu Ma"
-        preview.title_num = 8
-    elseif preview.title_num == 8 then
-        preview.button.name = "adness Menu M"
-        preview.title_num = 9
-    elseif preview.title_num == 9 then
-        preview.button.name = "Madness Menu "
-        preview.title_num = 10
-    elseif preview.title_num == 10 then
-        preview.button.name = " Madness Menu"
-        preview.title_num = 11
-    elseif preview.title_num == 11 then
-        preview.button.name = "u Madness Men"
-        preview.title_num = 12
-    elseif preview.title_num == 12 then
-        preview.button.name = "nu Madness Me"
-        preview.title_num = 13
-    elseif preview.title_num == 13 then
-        preview.button.name = "enu Madness M"
-        preview.title_num = 1
-    end
-    else
-        preview.version_timer = preview.version_timer + DT*10
-    end
+		preview.button.name = x
+
+		if preview.title_num == name_length/2 then
+			preview.title_num = 0
+		else
+			preview.title_num = preview.title_num + 1
+		end
+		preview.version_timer = 0
+	else
+		preview.version_timer = preview.version_timer + DT*10
+	end
 
     preview.button.rotation = math.random(10, -10)/500
 
