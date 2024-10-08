@@ -16,6 +16,7 @@ function preview:init(mod, button, menu)
 		Kristal.Menu_madness = {
 			--enter_explode = Utils.random() < 1/20 and true or false
 			enter_explode = false,
+			the_button_on = true
 		}
 		
 		local orig = Kristal.loadMod
@@ -77,6 +78,7 @@ function preview:init(mod, button, menu)
 		button.subtitle = "Dark Place? I think not."
 	end
 	
+	Kristal.Menu_madness.started = true -- so you can do things that ONLY happen when the engine is first started up
 end
 
 function preview:update()
@@ -102,7 +104,56 @@ end
 local subfont = Assets.getFont("main", 16)
 function preview:drawOverlay()
 	if MainMenu and MainMenu.state == "MODSELECT" then
-		-- insert non-cringe code here
+
+		if Kristal.Menu_madness.the_button_on and not Kristal.Menu_madness.the_button then
+
+			local img = love.graphics.newImage(sprite_path .. "/the_button.png")
+			Kristal.Menu_madness.the_button = Sprite(img,610,240)
+			local spr = Kristal.Menu_madness.the_button
+			spr:setScale(2)
+			spr:setOrigin(0.5,0.5)
+			local xy, wh = {spr:getPosition()},{spr:getSize()}
+			spr.collider = Hitbox(spr, 0,0, wh[1], wh[2])
+
+			MainMenu.stage:addChild(Kristal.Menu_madness.the_button)
+			Kristal.showCursor()
+		end
+		if Kristal.Menu_madness.the_button then
+			Kristal.Menu_madness.the_button:setScale(Utils.approach(Kristal.Menu_madness.the_button:getScale(), 2, 0.02))
+			if Kristal.Menu_madness.the_button.collider:clicked() then
+				local sound = Utils.pick({
+					"badexplosion",
+					"bell",
+					"screenshake",
+					"ui_select",
+					"suslaugh",
+					"alert",
+					"awkward",
+					"bageldefeat",
+					"damage",
+					"dtrans_flip",
+					"egg",
+					"grab",
+					"icespell",
+					"impact",
+					"noise", -- generic lol
+					"phone",
+					"spare",
+					"splat",
+
+				})
+				Assets.stopAndPlaySound(sound)
+				Kristal.Menu_madness.the_button:setScale(2.4)
+			end
+		end
+	else
+		if Kristal.Menu_madness.the_button then
+			Kristal.Menu_madness.the_button:remove()
+			Kristal.Menu_madness.the_button = nil
+
+			Kristal.hideCursor()
+		end
+
 	end
 end
 
