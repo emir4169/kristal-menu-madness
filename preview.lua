@@ -185,7 +185,7 @@ function preview:init(mod, button, menu)
         Kristal.Menu_madness.enter_explode = true
     elseif Utils.random() < 1/25 then
         button.subtitle = "Dark Place: Menu Edition"
-    elseif rand < 1/15 then
+    elseif Utils.random() < 1/15 then
         button.subtitle = "The Menu Has the Madness"
     else
         button.subtitle = "Dark Place? I think not."
