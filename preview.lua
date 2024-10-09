@@ -202,67 +202,8 @@ function preview:update()
     if MainMenu then
 
         if MainMenu.state == "MODSELECT" then
-
-            if Kristal.Menu_madness.the_button_on and not Kristal.Menu_madness.the_button then
-
-                local img = love.graphics.newImage(sprite_path .. "/the_button.png")
-                Kristal.Menu_madness.the_button = Sprite(img,610,240)
-                local spr = Kristal.Menu_madness.the_button
-                spr:setScale(2)
-                spr:setOrigin(0.5,0.5)
-                local xy, wh = {spr:getPosition()},{spr:getSize()}
-                spr.collider = Hitbox(spr, 0,0, wh[1], wh[2])
-    
-                MainMenu.stage:addChild(Kristal.Menu_madness.the_button)
-                Kristal.showCursor()
-            end
-            if Kristal.Menu_madness.the_button then
-                Kristal.Menu_madness.the_button:setScale(Utils.approach(Kristal.Menu_madness.the_button:getScale(), 2, 0.02))
-                if Kristal.Menu_madness.the_button.collider:clicked() then
-                    local sound = Utils.pick({
-                        "badexplosion",
-                        "bell",
-                        "screenshake",
-                        "ui_select",
-                        "suslaugh",
-                        "alert",
-                        "awkward",
-                        "bageldefeat",
-                        "damage",
-                        "dtrans_flip",
-                        "egg",
-                        "grab",
-                        "icespell",
-                        "impact",
-                        "noise", -- generic lol
-                        "phone",
-                        "spare",
-                        "splat",
-    
-                    })
-                    local funcs = {
-                        badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button = nil end,
-                        screenshake = function() Kristal.Menu_madness.the_button:shake(2) end,
-                        impact = function() Kristal.Menu_madness.the_button:shake(2) end,
-                        egg = function() MainMenu.music:stop() end,
-                        damage = function()
-                            local timer = Timer();
-                            MainMenu.stage:addChild(timer);
-                            timer:script(function(wait)
-                                local dialogue = DialogueText("[noskip][voice:".. (Utils.random() < 1/2 and "susie" or "ralsei") .."]* Ow!",20,10);
-                                MainMenu.stage:addChild(dialogue);
-                                wait(1);
-                                dialogue:remove();
-                            end)
-                        end,
-                    }
-                    Assets.stopAndPlaySound(sound)
-                    if funcs[sound] then
-                        funcs[sound]()
-                    end
-                    Kristal.Menu_madness.the_button:setScale(2.4)
-                end
-            end
+            preview:buttonUpdate()
+            
         else
             if Kristal.Menu_madness.the_button then
                 Kristal.Menu_madness.the_button:remove()
@@ -322,6 +263,69 @@ function preview:updatename()
     preview.button.rotation = math.random(6, -6)/500
 
     preview.button.x = 4 + math.random(2, -2)
+end
+
+function preview:buttonUpdate()
+    if Kristal.Menu_madness.the_button_on and not Kristal.Menu_madness.the_button then
+
+        local img = love.graphics.newImage(sprite_path .. "/the_button.png")
+        Kristal.Menu_madness.the_button = Sprite(img,610,240)
+        local spr = Kristal.Menu_madness.the_button
+        spr:setScale(2)
+        spr:setOrigin(0.5,0.5)
+        local xy, wh = {spr:getPosition()},{spr:getSize()}
+        spr.collider = Hitbox(spr, 0,0, wh[1], wh[2])
+
+        MainMenu.stage:addChild(Kristal.Menu_madness.the_button)
+        Kristal.showCursor()
+    end
+    if Kristal.Menu_madness.the_button then
+        Kristal.Menu_madness.the_button:setScale(Utils.approach(Kristal.Menu_madness.the_button:getScale(), 2, 0.02))
+        if Kristal.Menu_madness.the_button.collider:clicked() then
+            local sound = Utils.pick({
+                "badexplosion",
+                "bell",
+                "screenshake",
+                "ui_select",
+                "suslaugh",
+                "alert",
+                "awkward",
+                "bageldefeat",
+                "damage",
+                "dtrans_flip",
+                "egg",
+                "grab",
+                "icespell",
+                "impact",
+                "noise", -- generic lol
+                "phone",
+                "spare",
+                "splat",
+
+            })
+            local funcs = {
+                badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button = nil end,
+                screenshake = function() Kristal.Menu_madness.the_button:shake(2) end,
+                impact = function() Kristal.Menu_madness.the_button:shake(2) end,
+                egg = function() MainMenu.music:stop() end,
+                damage = function()
+                    local timer = Timer();
+                    MainMenu.stage:addChild(timer);
+                    timer:script(function(wait)
+                        local dialogue = DialogueText("[noskip][voice:".. (Utils.random() < 1/2 and "susie" or "ralsei") .."]* Ow!",20,10);
+                        MainMenu.stage:addChild(dialogue);
+                        wait(1);
+                        dialogue:remove();
+                    end)
+                end,
+            }
+            Assets.stopAndPlaySound(sound)
+            if funcs[sound] then
+                funcs[sound]()
+            end
+            Kristal.Menu_madness.the_button:setScale(2.4)
+        end
+    end
 end
 
 return preview
