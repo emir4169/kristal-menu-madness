@@ -5,6 +5,28 @@ preview.hide_background = false
 local mod_path = nil
 local sprite_path = nil
 
+local function getFrames(name, frames, path, return_images)
+    local path = (path ~= "" and path .. "/" or "") or sprite_path
+	local images = {}
+
+	if not sprite_path then
+		Kristal.Console:warn("sprite_path is nil. Menu Madness function getFrames.")
+		return
+	end
+
+	for i = 1, frames do
+		local spr = love.filesystem.getInfo( path..name.."_"..i..".png" ) and love.graphics.newImage(path..name.."_"..i..".png")
+
+        if return_images == false then
+            spr = path..name.."_"..i
+        end
+
+		table.insert(images,spr)
+	end
+
+	return images
+end
+
 function preview:init(mod, button, menu)
 
     preview.button = button
@@ -19,7 +41,8 @@ function preview:init(mod, button, menu)
         Kristal.Menu_madness = {
             --enter_explode = Utils.random() < 1/20 and true or false
             enter_explode = false,
-            the_button_on = true
+            the_button_on = true,
+            where_the_hell_are_we = Utils.random()-- < 1/10 and true or false,
         }
         
         local orig = Kristal.loadMod
@@ -67,6 +90,91 @@ function preview:init(mod, button, menu)
             uhhh:explode()
         end
         orig(menu, key, is_repeat)
+    end
+
+    if Kristal.Menu_madness.where_the_hell_are_we < 1/3 then
+        Kristal.Menu_madness.where_the_hell_are_we = 999
+        local timer = Timer()
+        MainMenu.stage:addChild(timer)
+
+        local playful = Utils.random() < 1/2
+
+        local kris = Sprite(getFrames("party/kris/dark/walk/right",4,"",false), -100,SCREEN_HEIGHT)
+        local susie = Sprite(getFrames("party/susie/dark/walk/right",4,"",false), -50,SCREEN_HEIGHT)
+
+        kris.layer = 999
+        susie.layer = 999
+
+        kris:play()
+        susie:play()
+
+        kris.anim_speed = 0.2
+        susie.anim_speed = 0.2
+        
+        MainMenu.stage:addChild(kris)
+        MainMenu.stage:addChild(susie)
+
+        kris:setOrigin(0.5,0.5)
+        susie:setOrigin(0.5,0.5)
+        
+        kris:setScale(2)
+        susie:setScale(2)
+
+        kris:setPosition(kris.x, SCREEN_HEIGHT - kris:getScaledHeight()/2)
+        susie:setPosition(susie.x, SCREEN_HEIGHT - susie:getScaledHeight()/2)
+
+        timer:script(function(wait)
+            wait(1)
+
+            kris:slideToSpeed(kris.x + 150, kris.y)
+            susie:slideToSpeed(susie.x + 150 + (playful and 0 or 20), susie.y)
+
+            wait(((150 + (playful and 20 or 0)) / 4) * DT)
+
+            kris:set("party/kris/dark/walk/down_1")
+            susie:set("party/susie/dark/walk/down_1")
+
+            wait(1)
+
+            if playful then susie:set("party/susie/dark/playful_punch_1") end
+
+            local dialogue = DialogueText("[noskip][voice:susie]* Kris,[wait:5] where the [wait:10][func:s]HELL[wait:5] are we??",80,170)
+            dialogue.functions = {s = function()
+                if not playful then
+                    susie:set("party/susie/dark/turn_around")
+                    Assets.playSound("whip_crack_only")
+                    return
+                end
+                susie:set("party/susie/dark/playful_punch_2")
+                susie:shake(2,0)
+                Assets.playSound("impact")
+
+                kris:shake(2,0)
+            end}
+            MainMenu.stage:addChild(dialogue)
+
+            wait(3)
+            susie:set("party/susie/dark/walk/down_1")
+            dialogue:remove()
+
+            wait(1)
+
+            kris:slideToSpeed(kris.x - 150, kris.y)
+            susie:slideToSpeed(susie.x - 150 - (playful and 0 or 20), susie.y)
+
+            kris:setSprite(getFrames("party/kris/dark/walk/left",4,"",false))
+            susie:setSprite(getFrames("party/susie/dark/walk/left",4,"",false))
+
+            kris:play()
+            susie:play()
+
+            wait(2) -- lazy
+
+            kris:remove()
+            susie:remove()
+            timer:remove()
+        end)
+        --timer:remove()
     end
     
     Kristal.Menu_madness.enter_explode = false
