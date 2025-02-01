@@ -180,7 +180,7 @@ function preview:init(mod, button, menu)
     Kristal.Menu_madness.enter_explode = false
     if not MainMenu then
         button.subtitle = "(kristal version outdated! cannot run)"
-    elseif Utils.random() < 1/50 then
+    elseif Utils.random() < 1/50 and not Kristal.Config["mm_loudIsntFunny"] then
         button.subtitle = "And then it went all \"BOOOMMM!!\" Crazy right?!?"
         Kristal.Menu_madness.enter_explode = true
     elseif Utils.random() < 1/25 then
