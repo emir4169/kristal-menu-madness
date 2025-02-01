@@ -264,7 +264,7 @@ function preview:updatename()
 
     preview.button.rotation = math.random(6, -6)/500
 
-    preview.button.x = 4 + math.random(2, -2)
+    preview.button.x = Utils.round(preview.button.x+8, (preview.button.width+8)) + math.random(2, -2)
 end
 
 function preview:buttonUpdate()
