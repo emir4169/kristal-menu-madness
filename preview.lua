@@ -306,7 +306,7 @@ function preview:buttonUpdate()
 
             })
             local funcs = {
-                badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button = nil end,
+                badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button.collider.x = -100 end,
                 screenshake = function() Kristal.Menu_madness.the_button:shake(2) end,
                 impact = function() Kristal.Menu_madness.the_button:shake(2) end,
                 egg = function() MainMenu.music:stop() end,
@@ -325,7 +325,9 @@ function preview:buttonUpdate()
             if funcs[sound] then
                 funcs[sound]()
             end
-            Kristal.Menu_madness.the_button:setScale(2.4)
+            if Kristal.Menu_madness.the_button then
+                Kristal.Menu_madness.the_button:setScale(2.4)
+            end
         end
     end
 end
