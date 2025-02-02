@@ -180,7 +180,7 @@ function preview:init(mod, button, menu)
     Kristal.Menu_madness.enter_explode = false
     if not MainMenu then
         button.subtitle = "(kristal version outdated! cannot run)"
-    elseif Utils.random() < 1/50 then
+    elseif Utils.random() < 1/50 and not Kristal.Config["mm_loudIsntFunny"] then
         button.subtitle = "And then it went all \"BOOOMMM!!\" Crazy right?!?"
         Kristal.Menu_madness.enter_explode = true
     elseif Utils.random() < 1/25 then
@@ -264,7 +264,7 @@ function preview:updatename()
 
     preview.button.rotation = math.random(6, -6)/500
 
-    preview.button.x = 4 + math.random(2, -2)
+    preview.button.x = Utils.round(preview.button.x+8, (preview.button.width+8)) + math.random(2, -2)
 end
 
 function preview:buttonUpdate()
@@ -306,7 +306,7 @@ function preview:buttonUpdate()
 
             })
             local funcs = {
-                badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button = nil end,
+                badexplosion = function() Kristal.Menu_madness.the_button:explode(); Kristal.Menu_madness.the_button.collider.x = -100 end,
                 screenshake = function() Kristal.Menu_madness.the_button:shake(2) end,
                 impact = function() Kristal.Menu_madness.the_button:shake(2) end,
                 egg = function() MainMenu.music:stop() end,
@@ -325,7 +325,9 @@ function preview:buttonUpdate()
             if funcs[sound] then
                 funcs[sound]()
             end
-            Kristal.Menu_madness.the_button:setScale(2.4)
+            if Kristal.Menu_madness.the_button then
+                Kristal.Menu_madness.the_button:setScale(2.4)
+            end
         end
     end
 end
